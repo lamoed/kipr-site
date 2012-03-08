@@ -1,9 +1,0 @@
-<?php
-
-class ControlMod extends MainModel
-{
-    function loginCheck($name) {
-        $admin = $this->ormModel('admin');
-        return 'lalal';
-    }
-}
