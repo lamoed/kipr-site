@@ -1,0 +1,33 @@
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+	RewriteEngine on
+    #перенаправляем Konqueror и «старые браузеры»
+    RewriteCond %{HTTP:Accept-encoding} !gzip [OR]
+    RewriteCond %{HTTP_USER_AGENT} Konqueror
+    RewriteRule ^(.*)\.(css|js)$ $1.nogzip.$2 [QSA,L]
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header append Vary User-Agent
+    #выставляем для всех css/js файлов Content-Encoding
+    <FilesMatch .*\.(js|css)$>
+	Header set Content-Encoding: gzip
+	Header set Cache-control: private
+    </FilesMatch>
+    #сбрасываем Content-Encoding в том случае, если отдаем не архив
+    <FilesMatch .*\.nogzip\.(js|css)$>
+	Header unset Content-Encoding
+    </FilesMatch>
+</IfModule>
+
+RewriteEngine on
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(index\.php)?(.*)$ /index.php/$2 [QSA,L]
+
+ErrorDocument 400 http://kipr.susu.ac.ru/400.html
+ErrorDocument 403 http://kipr.susu.ac.ru/403.html
+ErrorDocument 404 http://kipr.susu.ac.ru/404.html
+ErrorDocument 500 http://kipr.susu.ac.ru/500.html

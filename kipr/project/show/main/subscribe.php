@@ -1,0 +1,1 @@
+<h2><?=$mail_message?></h2>
